@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Rowen! 🎉</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .greeting {
+            opacity: 0;
+            animation: fadeInDown 1.5s ease-out forwards;
+        }
+
+        .greeting h1 {
+            font-size: 4rem;
+            color: #fff;
+            margin-bottom: 20px;
+            text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
+            letter-spacing: 2px;
+        }
+
+        .greeting p {
+            font-size: 1.8rem;
+            color: #fff;
+            margin-bottom: 40px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            animation: fadeInUp 1.5s ease-out 0.5s forwards;
+        }
+
+        .birthday-cake {
+            font-size: 5rem;
+            opacity: 0;
+            animation: bounce 1.5s ease-out 1s forwards;
+            margin: 20px 0;
+        }
+
+        .message {
+            font-size: 1.3rem;
+            color: #fff;
+            max-width: 600px;
+            margin: 30px auto;
+            line-height: 1.8;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            animation: fadeInUp 1.5s ease-out 1.5s forwards;
+        }
+
+        .button {
+            margin-top: 40px;
+            opacity: 0;
+            animation: fadeInUp 1.5s ease-out 2s forwards;
+        }
+
+        .button a {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(245, 87, 108, 0.4);
+        }
+
+        .button a:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(245, 87, 108, 0.6);
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            50% {
+                transform: translateY(-20px) scale(1.1);
+            }
+        }
+
+        /* Fireworks */
+        .fireworks-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .firework {
+            position: absolute;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            pointer-events: none;
+        }
+
+        @keyframes explode {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty));
+            }
+        }
+
+        .confetti {
+            position: fixed;
+            pointer-events: none;
+            font-size: 2rem;
+            animation: confettiFall 3s ease-in forwards;
+        }
+
+        @keyframes confettiFall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .image-gallery {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.8);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .image-gallery.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .image-container {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .gallery-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+            opacity: 0;
+        }
+
+        .gallery-image.show {
+            animation: slideIn 0.8s ease-out forwards;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8) rotateY(90deg);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) rotateY(0deg);
+            }
+        }
+
+        @keyframes slideOut {
+            from {
+                opacity: 1;
+                transform: scale(1) rotateY(0deg);
+            }
+            to {
+                opacity: 0;
+                transform: scale(0.8) rotateY(-90deg);
+            }
+        }
+
+        .gallery-image.hide {
+            animation: slideOut 0.6s ease-in forwards;
+        }
+
+        .image-counter {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 1.2rem;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px 20px;
+            border-radius: 25px;
+        }
+
+        .close-gallery {
+            position: absolute;
+            top: 20px;
+            left: 30px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 101;
+        }
+
+        .close-gallery:hover {
+            background: white;
+            transform: rotate(90deg);
+        }
+
+        .nav-button {
+            display: none;
+        }
+
+        .nav-button:hover {
+            background: white;
+        }
+
+        .prev-button {
+            left: 20px;
+        }
+
+        .next-button {
+            right: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="fireworks-container" id="fireworksContainer"></div>
+
+    <audio id="backgroundMusic" preload="auto" loop>
+        <source src="pic/audio.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="image-gallery" id="imageGallery">
+        <button class="close-gallery" id="closeGallery">✕</button>
+        <button class="nav-button prev-button" id="prevButton">❮</button>
+        <div class="image-container">
+            <img class="gallery-image" id="galleryImage" src="" alt="Birthday Photo">
+        </div>
+        <button class="nav-button next-button" id="nextButton">❯</button>
+        <div class="image-counter" id="imageCounter"></div>
+    </div>
+
+    <div class="container">
+        <div class="greeting">
+            <h1>🎉 HAPPY BIRTHDAY 🎉</h1>
+        </div>
+        <div class="birthday-cake">🎂</div>
+        <div class="greeting">
+            <p>Rowen!</p>
+        </div>
+        <div class="message">
+            <p>Happy Birtday Kupal, Wag ka sana kunin ni lord!! More Birthday to Come Bro!!</p>
+        </div>
+        <div class="button">
+            <a href="#" onclick="createExplosion(event)">✨ Celebrate! ✨</a>
+        </div>
+    </div>
+
+    <script>
+        // Image gallery data
+        const images = [
+            'pic/IMG_20230316_073713_175.jpg',
+            'pic/IMG_20230501_225036_815.jpg',
+            'pic/IMG_20230501_225058_093.jpg',
+            'pic/IMG_20230530_083945_949.jpg',
+            'pic/IMG_20230621_111936_808.jpg',
+            'pic/IMG_20230704_152046_987.jpg',
+            'pic/IMG_20240108_220703_527.jpg',
+            'pic/IMG_20240803_151824_447.jpg',
+            'pic/IMG_20240803_151825_971.jpg',
+            'pic/IMG_20250215_152522.jpg',
+            'pic/IMG_20250215_153439.jpg',
+            'pic/IMG_8928.JPG',
+            'pic/IMG_9129.JPG'
+        ];
+
+        let currentImageIndex = 0;
+
+        // Audio control
+        const backgroundMusic = document.getElementById('backgroundMusic');
+        backgroundMusic.volume = 0.5; // Set volume to 50%
+
+        // Gallery controls
+        const imageGallery = document.getElementById('imageGallery');
+        const galleryImage = document.getElementById('galleryImage');
+        const imageCounter = document.getElementById('imageCounter');
+        const closeGallery = document.getElementById('closeGallery');
+        const prevButton = document.getElementById('prevButton');
+        const nextButton = document.getElementById('nextButton');
+
+        function displayImage(index) {
+            if (index >= images.length) {
+                currentImageIndex = 0;
+            } else if (index < 0) {
+                currentImageIndex = images.length - 1;
+            } else {
+                currentImageIndex = index;
+            }
+
+            galleryImage.classList.remove('show', 'hide');
+            galleryImage.src = images[currentImageIndex];
+            imageCounter.textContent = `${currentImageIndex + 1} / ${images.length}`;
+            
+            // Trigger animation
+            setTimeout(() => {
+                galleryImage.classList.add('show');
+            }, 10);
+        }
+
+        function autoPlayImages() {
+            let delay = 1500; // Delay between images
+            
+            images.forEach((img, index) => {
+                setTimeout(() => {
+                    if (index > 0) {
+                        galleryImage.classList.add('hide');
+                        setTimeout(() => {
+                            displayImage(index);
+                        }, 600);
+                    } else {
+                        displayImage(0);
+                    }
+                }, delay * index);
+            });
+        }
+
+        function openGallery() {
+            imageGallery.classList.add('active');
+            autoPlayImages();
+        }
+
+        function closeGalleryFunc() {
+            imageGallery.classList.remove('active');
+        }
+
+        closeGallery.addEventListener('click', closeGalleryFunc);
+        prevButton.addEventListener('click', () => {
+            displayImage(currentImageIndex - 1);
+        });
+        nextButton.addEventListener('click', () => {
+            displayImage(currentImageIndex + 1);
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (imageGallery.classList.contains('active')) {
+                if (e.key === 'ArrowLeft') displayImage(currentImageIndex - 1);
+                if (e.key === 'ArrowRight') displayImage(currentImageIndex + 1);
+                if (e.key === 'Escape') closeGalleryFunc();
+            }
+        });
+
+        // Click outside to close
+        imageGallery.addEventListener('click', (e) => {
+            if (e.target === imageGallery) {
+                closeGalleryFunc();
+            }
+        });
+
+        // Create confetti particles
+        function createConfetti() {
+            const emojis = ['🎉', '🎊', '🎈', '⭐', '✨', '🌟', '💫', '🎁'];
+            for (let i = 0; i < 30; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.top = '-10px';
+                confetti.style.animationDelay = Math.random() * 0.5 + 's';
+                document.body.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 3500);
+            }
+        }
+
+        // Create fireworks effect
+        function createFireworks(x, y) {
+            const colors = ['#ff006e', '#fb5607', '#ffbe0b', '#8338ec', '#3a86ff', '#06ffa5'];
+            const particleCount = 50;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = x + 'px';
+                particle.style.top = y + 'px';
+                particle.style.width = '8px';
+                particle.style.height = '8px';
+                particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.borderRadius = '50%';
+                particle.style.boxShadow = '0 0 10px ' + particle.style.backgroundColor;
+
+                const angle = (Math.PI * 2 * i) / particleCount;
+                const velocity = 5 + Math.random() * 3;
+                const tx = Math.cos(angle) * velocity * 50;
+                const ty = Math.sin(angle) * velocity * 50;
+
+                particle.style.setProperty('--tx', tx + 'px');
+                particle.style.setProperty('--ty', ty + 'px');
+                particle.style.animation = `explode 1.5s ease-out forwards`;
+
+                document.querySelector('.fireworks-container').appendChild(particle);
+                setTimeout(() => particle.remove(), 1500);
+            }
+        }
+
+        // Explosion on button click
+        function createExplosion(e) {
+            e.preventDefault();
+            const rect = e.target.getBoundingClientRect();
+            const x = rect.left + rect.width / 2;
+            const y = rect.top + rect.height / 2;
+
+            // Play music
+            backgroundMusic.play().catch(err => console.log('Audio play failed:', err));
+
+            // Create multiple fireworks
+            createFireworks(x, y);
+            setTimeout(() => createFireworks(x - 100, y - 100), 150);
+            setTimeout(() => createFireworks(x + 100, y - 100), 300);
+            createConfetti();
+
+            // Trigger multiple explosions
+            setTimeout(() => {
+                createFireworks(window.innerWidth / 2, window.innerHeight / 3);
+            }, 500);
+
+            // Open image gallery after celebration
+            setTimeout(() => {
+                openGallery();
+            }, 1000);
+        }
+
+        // Auto-create confetti on page load
+        window.addEventListener('load', () => {
+            setTimeout(createConfetti, 1000);
+        });
+
+        // Create random fireworks in background
+        setInterval(() => {
+            const x = Math.random() * window.innerWidth;
+            const y = Math.random() * (window.innerHeight / 2);
+            createFireworks(x, y);
+        }, 3000);
+    </script>
+</body>
+</html>
